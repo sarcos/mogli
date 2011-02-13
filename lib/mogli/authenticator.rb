@@ -12,10 +12,11 @@ module Mogli
     end
 
     def authorize_url(options = {})
+      auth_type_url = options.delete(:type) == "dialog" ? "www.facebook.com/dialog/oauth" : "graph.facebook.com/oauth/authorize"
       options_part = "&" + options.map {|k,v| "#{k}=#{v.kind_of?(Array) ? v.join(',') : v}" }.join('&') unless options.empty?
-      "https://graph.facebook.com/oauth/authorize?client_id=#{client_id}&redirect_uri=#{CGI.escape(callback_url)}#{options_part}"
+      "https://#{auth_type_url}?client_id=#{client_id}&redirect_uri=#{CGI.escape(callback_url)}#{options_part}"
     end
-
+    
     def access_token_url(code)
       "https://graph.facebook.com/oauth/access_token?client_id=#{client_id}&redirect_uri=#{CGI.escape(callback_url)}&client_secret=#{secret}&code=#{CGI.escape(code)}"
     end
