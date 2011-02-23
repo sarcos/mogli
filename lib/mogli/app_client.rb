@@ -10,10 +10,10 @@ module Mogli
     end
     
     def app_request_url
-      "https://graph.facebook.com/#{user_id}/apprequests?message='#{message}'&data='#{data}'&app_access_token=#{app_at}&method=post"
+      URI.encode("https://graph.facebook.com/#{user_id}/apprequests?message='#{message}'&data='#{data}'&access_token=#{app_at}&method=post")
     end
     
-    def app_request
+    def app_request(options)
       options_to_send = options.dup
       options_to_send[:fields] = Array(options[:fields]).join(",")
       self.class.post(app_request_url,:body=>default_params.merge(options_to_send))
